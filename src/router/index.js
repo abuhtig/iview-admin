@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routers'
 import store from '@/store'
-import iView from 'iview'
+import iView from 'view-design'
 import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 import config from '@/config'
 const { homeName } = config
@@ -51,6 +51,11 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 router.afterEach(to => {
   setTitle(to, router.app)

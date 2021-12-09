@@ -42,5 +42,10 @@ export default {
   tree_table_page: '树状表格',
   org_tree_page: '组织结构树',
   drag_drawer_page: '可拖动抽屉',
-  tree_select_page: '树状下拉选择器'
+  tree_select_page: '树状下拉选择器',
+  content_manage: '內容管理',
+  article_manage: '文章管理',
+  label_manage: '标签管理',
+  user_manage: '用户管理',
+  user: '用户'
 }

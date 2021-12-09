@@ -1,9 +1,8 @@
-import axios from '@/libs/api.request'
+import axios from '@/libs/request'
 
-export const login = ({ userName, password }) => {
+export const login = ({ userinfo }) => {
   const data = {
-    userName,
-    password
+    ...userinfo
   }
   return axios.request({
     url: 'login',
@@ -13,12 +12,10 @@ export const login = ({ userName, password }) => {
 }
 
 export const getUserInfo = (token) => {
-  return axios.request({
-    url: 'get_info',
-    params: {
-      token
-    },
-    method: 'get'
+  return axios.get('/public/getinfo', {
+    headers: {
+      'Authorization': 'Beaerer ' + token
+    }
   })
 }
 
