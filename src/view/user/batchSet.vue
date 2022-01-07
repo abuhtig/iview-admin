@@ -8,10 +8,8 @@
           :label-width="80"
         >
           <FormItem label="角色">
-            <Select v-model="formItem.roles">
-              <Option value="admin">管理员</Option>
-              <Option value="super_admin">超级管理员</Option>
-              <Option value="user">普通用户</Option>
+            <Select v-model="formItem.roles" >
+              <Option v-for="(item, index) in rolesList" :key="index + 'roles'" :value="item.roles">{{item.name}}</Option>
             </Select>
           </FormItem>
           <FormItem label="状态">
@@ -40,6 +38,10 @@ export default {
     isShowbatch: {
       type: Boolean,
       default: false
+    },
+    rolesList: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {

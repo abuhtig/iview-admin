@@ -47,16 +47,19 @@
       <editModal
         :isShow="showEdit"
         :editItem="item"
+        :rolesList="rolesList"
         @editEvent="handleEdit"
         @editEventCancel="handleEditCancel"
       ></editModal>
       <addModal
         :isShowadd="showadd"
+        :rolesList="rolesList"
         @addEvent="handleadd"
         @addEventCancel="handleaddCancel"
       ></addModal>
       <batchSet
         :isShowbatch="showbatch"
+        :rolesList="rolesList"
         @batchEvent="handlebatch"
         @batchCancel="handlebatchCancel"
       ></batchSet>
@@ -70,6 +73,7 @@ import dayjs from 'dayjs'
 import editModal from './editModal.vue'
 import addModal from './addModal.vue'
 import batchSet from './batchSet.vue'
+import { getRolesName } from '@/api/admin.js'
 import {
   getUserList,
   deleteUser,
@@ -97,6 +101,7 @@ export default {
       item: {},
       tableData: [],
       selectData: [],
+      rolesList: [],
       columns: [
         { title: '用户名', key: 'name', minWidth: 150, align: 'center', serach: { type: 'input' } },
         { title: '邮箱', key: 'username', minWidth: 190, align: 'center', serach: { type: 'input' } },
@@ -119,23 +124,10 @@ export default {
           align: 'center',
           serach: {
             type: 'select',
-            options: [
-              {
-                key: '管理员',
-                value: 'admin'
-              },
-              {
-                key: '超级管理员',
-                value: 'super_admin'
-              },
-              {
-                key: '普通用户',
-                value: 'user'
-              }
-            ]
+            options: this.rolesList
           },
           render: (h, params) => {
-            return h('div', [h('span', params.row.roles)])
+            return h('div', [h('span', this.rolesName[params.row.roles])])
           }
         },
         {
@@ -257,6 +249,13 @@ export default {
         }
       })
     },
+    _getRolesName () {
+      getRolesName().then((res) => {
+        if (res.code === 200) {
+          this.rolesList = res.data
+        }
+      })
+    },
     handleEdit (item) {
       editUser(item).then((res) => {
         if (res.code === 200) {
@@ -353,14 +352,14 @@ export default {
       const msg = this.selectData.map((o) => o.name).join(',')
       this.$Modal.confirm({
         title: '确认修改?',
-        content: `确认修改${msg}这个用户吗?`,
+        content: `确认修改${msg}这些用户吗?`,
         onOk: () => {
           const ids = this.selectData.map((o) => o._id)
           batchuser({ ids: ids, set })
             .then((res) => {
               this.tableData = this.tableData.map((item) => {
                 if (ids.includes(item._id)) {
-                  for (let keys of Object.keys(set)) {
+                  for (var keys of Object.keys(set)) {
                     item[keys] = set[keys]
                   }
                 }
@@ -386,6 +385,16 @@ export default {
   },
   mounted () {
     this.getUsers()
+    this._getRolesName()
+  },
+  computed: {
+    rolesName () {
+      const tmp = {}
+      this.rolesList.forEach((i) => {
+        tmp[i.roles] = i.name
+      })
+      return tmp
+    }
   }
 }
 </script>

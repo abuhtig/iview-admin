@@ -80,14 +80,18 @@ export default {
         login({
           ...userinfo
         }).then(res => {
-          const data = res.data
-          commit('setToken', res.token)
-          commit('setAvatar', data.pic)
-          commit('setUserName', data.name)
-          commit('setUserId', data._id)
-          commit('setAccess', data.roles)
-          commit('setHasGetInfo', true)
-          resolve(true)
+          if (res.code === 200) {
+            const data = res.data
+            commit('setToken', res.token)
+            commit('setAvatar', data.pic)
+            commit('setUserName', data.name)
+            commit('setUserId', data._id)
+            commit('setAccess', data.roles)
+            commit('setHasGetInfo', true)
+            resolve(true)
+          } else {
+            resolve(res.msg)
+          }
         }).catch(err => {
           reject(err)
         })

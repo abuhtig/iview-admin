@@ -204,6 +204,7 @@ export default {
       })
     },
     orshow () {
+      this.item = {}
       this.showEdit = true
       this.build = true
     },

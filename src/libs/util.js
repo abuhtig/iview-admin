@@ -397,3 +397,127 @@ export const setTitle = (routeItem, vm) => {
   const resTitle = pageTitle ? `${title} - ${pageTitle}` : title
   window.document.title = resTitle
 }
+
+export const deleteNode = (parent, node) => {
+  for (let i = 0; i < parent.length; i++) {
+    const item = parent[i]
+    if (item.nodeKey === node.nodeKey) {
+      parent.splice(i, 1)
+      return parent
+    } else {
+      if (item.children && item.children.length > 0) {
+        deleteNode(item.children, node)
+      }
+    }
+  }
+  return parent
+}
+
+export const insertMenu = (parent, select, data) => {
+  for (let i = 0; i < parent.length; i++) {
+    const item = parent[i]
+    if (item.nodeKey === select.nodeKey) {
+      parent.push(data)
+      return parent
+    } else {
+      if (item.children && item.children.length > 0) {
+        insertMenu(item.children, select, data)
+      }
+    }
+  }
+  return parent
+}
+
+export const updataTree = (parent, node) => {
+  for (let i = 0; i < parent.length; i++) {
+    const item = parent[i]
+    if (item.nodeKey === node.nodeKey) {
+      parent.splice(i, 1, node)
+      return parent
+    } else {
+      if (item.children && item.children.length > 0) {
+        updataTree(item.children, node)
+      }
+    }
+  }
+  return parent
+}
+
+export const getNode = (arr, node) => {
+  for (let i = 0; i < arr.length; i++) {
+    const currentNode = arr[i]
+    if (currentNode.nodeKey === node.nodeKey) {
+      if (!currentNode.parent) {
+        deleteKey(currentNode, 'parent')
+        return currentNode
+      } else {
+        return true
+      }
+    } else {
+      if (currentNode.children && currentNode.children.length > 0) {
+        currentNode.children.map((o) => {
+          o.parent = currentNode
+        })
+
+        if (getNode(currentNode.children, node)) {
+          deleteKey(currentNode, 'parent')
+          return currentNode
+        }
+      }
+    }
+  }
+}
+
+export const deleteKey = (node, str) => {
+  if (node.children && node.children.length > 0) {
+    node.children.forEach((item) => {
+      delete item[str]
+      if (item.children && item.children.length > 0) {
+        deleteKey(item.children, str)
+      }
+    })
+  }
+  return node
+}
+
+export const modifyNode = (tree, nodes, property, flag) => {
+  for (let i = 0; i < tree.length; i++) {
+    const currentNode = tree[i]
+    if (nodes && nodes.length > 0) {
+      if (nodes.includes(currentNode._id)) {
+        const tmp = { ...currentNode }
+        tmp[property] = flag
+        tree.splice(i, 1, tmp)
+      }
+    } else {
+      const tmp = { ...currentNode }
+      tmp[property] = flag
+      tree.splice(i, 1, tmp)
+    }
+    if (currentNode.children && currentNode.children.length > 0) {
+      modifyNode(currentNode.children, nodes, property, flag)
+    }
+    if (currentNode.operations && currentNode.operations.length > 0) {
+      modifyNode(currentNode.children, nodes, '_' + property, flag)
+    }
+  }
+}
+
+export const sortObj = (arr, property) => {
+  return arr.sort((m, n) => m[property] - n[property])
+}
+
+export const getIds = (menu, proper) => {
+  const arr = []
+  menu.forEach((item) => {
+    if (item.checked || item._checked) {
+      arr.push(item._id)
+    }
+    proper.forEach((pro) => {
+      if (item[pro] && item[pro].length > 0) {
+        arr.push(getIds(item[pro], proper))
+      }
+    })
+  })
+  return arr.flat(Infinity)
+}

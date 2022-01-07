@@ -25,4 +25,9 @@ const reg = (reginfo) => {
     ...reginfo
   })
 }
-export { getCode, forget, login, reg }
+
+// 获取能访问的菜单
+const getRoutes = () => {
+  return axios.get('/admin/getroutes')
+}
+export { getCode, forget, login, reg, getRoutes }

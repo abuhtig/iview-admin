@@ -178,7 +178,7 @@ export default {
      */
     searchable: {
       type: Boolean,
-      default: true
+      default: false
     },
     /**
      * @description 搜索控件所在位置，'top' / 'bottom'
@@ -362,7 +362,7 @@ export default {
     },
     value (val) {
       this.handleTableData()
-      // if (this.searchable ) this.handleSearch()
+      // if (this.searchable) this.handleSearch()
     }
   },
   mounted () {

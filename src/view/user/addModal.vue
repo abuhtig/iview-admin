@@ -17,11 +17,9 @@
           <FormItem prop="password" label="密码">
             <Input v-model="formItem.password" placeholder="请输入密码"></Input>
           </FormItem>
-          <FormItem label="角色">
-            <Select v-model="formItem.roles">
-              <Option value="admin">管理员</Option>
-              <Option value="super_admin">超级管理员</Option>
-              <Option value="user">普通用户</Option>
+          <FormItem prop="roles" label="角色">
+            <Select v-model="formItem.roles" >
+              <Option v-for="(item, index) in rolesList" :key="index + 'roles'" :value="item.roles">{{item.name}}</Option>
             </Select>
           </FormItem>
           <FormItem label="VIP">
@@ -64,6 +62,10 @@ export default {
     isShowadd: {
       type: Boolean,
       default: false
+    },
+    rolesList: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {
@@ -142,6 +144,9 @@ export default {
           { required: true, message: '登录名不能为空', trigger: 'blur' },
           { type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
           { validator: validateUsername, trigger: 'blur' }
+        ],
+        roles: [
+          { required: true, message: '请选择角色权限', trigger: 'blur' }
         ],
         name: [
           { required: true, message: '昵称不能为空', trigger: 'blur' },

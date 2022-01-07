@@ -47,5 +47,11 @@ export default {
   article_manage: '文章管理',
   label_manage: '标签管理',
   user_manage: '用户管理',
-  user: '用户'
+  user: '用户',
+  menu_manage: '菜单管理',
+  user_roles: '角色管理',
+  roles: '权限',
+  menu: '菜单',
+  review: '评论',
+  comment: '评论管理'
 }

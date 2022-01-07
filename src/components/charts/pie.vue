@@ -12,7 +12,8 @@ export default {
   props: {
     value: Array,
     text: String,
-    subtext: String
+    subtext: String,
+    pieName: String
   },
   data () {
     return {
@@ -46,6 +47,7 @@ export default {
           {
             type: 'pie',
             radius: '55%',
+            name: this.pieName,
             center: ['50%', '60%'],
             data: this.value,
             itemStyle: {

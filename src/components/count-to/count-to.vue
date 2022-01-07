@@ -49,7 +49,7 @@ export default {
      */
     duration: {
       type: Number,
-      default: 2
+      default: 3
     },
     /**
      * @description 动画延迟开始的时间，单位是秒

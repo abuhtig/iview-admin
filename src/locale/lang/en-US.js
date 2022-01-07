@@ -47,5 +47,11 @@ export default {
   article_manage: 'Article Manage',
   label_manage: 'Label Manage',
   user_manage: 'User Manage',
-  user: 'User'
+  user: 'User',
+  menu_manage: 'Menu Manage',
+  user_roles: 'User Roles',
+  roles: 'Roles',
+  menu: 'Menu',
+  comment: 'comment',
+  review: 'review'
 }

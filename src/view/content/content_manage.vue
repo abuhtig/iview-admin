@@ -10,12 +10,19 @@
         :columns="columns"
         @on-build="handleBuild"
         @on-trash="handleTrash"
+        @on-selection-change="select"
         @searchEvent="handleSearch"
       />
       <Row type="flex" justify="space-between" align="middle">
+        <Col>
+        <Button @click="deletSelect">删除选中</Button>
+          <Button style="margin: 10px 10px" @click="editSelect"
+            >编辑选中</Button>
         <Button style="margin: 10px 0" type="primary" @click="exportExcel"
           >导出为Excel文件</Button
         >
+        </Col>
+        <Col>
         <Page
           :total="total"
           @on-page-size-change="onPageSizeChange"
@@ -26,6 +33,7 @@
           show-elevator
           show-sizer
         />
+        </Col>
       </Row>
       <editModal
         :isShow="showEdit"
@@ -33,6 +41,11 @@
         @editEvent="handleEdit"
         @editEventCancel="handleEditCancel"
       ></editModal>
+      <batchSet
+        :isShowbatch="showbatch"
+        @batchEvent="handlebatch"
+        @batchCancel="handlebatchCancel"
+      ></batchSet>
     </Card>
   </div>
 </template>
@@ -41,12 +54,14 @@
 import Tables from '_c/tables'
 import dayjs from 'dayjs'
 import editModal from './modal/editModal.vue'
-import { getTableData, deletePost, editpost } from '@/api/content'
+import batchSet from './modal/batchSet.vue'
+import { getTableData, deletePost, editpost, batchPosts, deletePosts } from '@/api/content'
 export default {
   name: 'tables_page',
   components: {
     Tables,
-    editModal
+    editModal,
+    batchSet
   },
   data () {
     return {
@@ -54,8 +69,10 @@ export default {
       page: 0,
       total: 0,
       showEdit: false,
+      showbatch: false,
       item: {},
       option: {},
+      selectData: [],
       columns: [
         {
           title: '标题',
@@ -270,6 +287,13 @@ export default {
           handle: 'true'
         },
         {
+          type: 'selection',
+          fixed: 'left',
+          width: 60,
+          align: 'center',
+          handle: 'true'
+        },
+        {
           title: '设置',
           fixed: 'right',
           align: 'center',
@@ -344,7 +368,77 @@ export default {
       }
       this.option = v
       this.getList()
+    },
+    select (s) {
+      this.selectData = s
+    },
+    deletSelect () {
+      if (this.selectData.length === 0) {
+        this.$Message.info('请选择要删除的数据')
+        return
+      }
+      const msg = this.selectData.map((o) => o.title).join(',')
+      this.$Modal.confirm({
+        title: '确认删除?',
+        content: `确认删除${msg}这些文章吗?`,
+        onOk: () => {
+          const ids = this.selectData.map((o) => o._id)
+          deletePosts(ids)
+            .then((res) => {
+              if (res.code === 200) {
+                this.tableData = this.tableData.filter(
+                  (item) => !ids.includes(item._id)
+                )
+                this.$Message.success('成功删除!')
+              }
+            })
+            .catch((err) => {
+              this.$Message.info('删除失败! 原因：' + err)
+            })
+        },
+        onCancel: () => {
+          this.$Message.info('已取消!')
+        }
+      })
+    },
+    editSelect () {
+      if (this.selectData.length === 0) {
+        this.$Message.info('请选择要修改的数据')
+        return
+      }
+      this.showbatch = true
+    },
+    handlebatchCancel (bool) {
+      this.showbatch = bool
+    },
+    handlebatch (set) {
+      const msg = this.selectData.map((o) => o.name).join(',')
+      this.$Modal.confirm({
+        title: '确认修改?',
+        content: `确认修改${msg}这些用户吗?`,
+        onOk: () => {
+          const ids = this.selectData.map((o) => o._id)
+          batchPosts({ ids: ids, set })
+            .then(() => {
+              this.tableData = this.tableData.map((item) => {
+                if (ids.includes(item._id)) {
+                  for (let keys of Object.keys(set)) {
+                    item[keys] = set[keys]
+                  }
+                }
+              })
+              this.$Message.success('修改成功!')
+            })
+            .catch((err) => {
+              this.$Message.info('修改失败! 原因：' + err)
+            })
+        },
+        onCancel: () => {
+          this.$Message.info('已取消!')
+        }
+      })
     }
+
   },
   mounted () {
     this.getList()
