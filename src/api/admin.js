@@ -45,6 +45,24 @@ const batchDeleteComment = (ids) => {
 const getStats = () => {
   return axios.get('/admin/getStats')
 }
+const getlogs = () => {
+  return axios.get('/admin/getLogs')
+}
+const deleteLogs = (ids) => {
+  return axios.post('/admin/deleteLogs', ids)
+}
+const uploadImg = (formData) => {
+  return axios.post('/admin/uploadImg', formData)
+}
+const uploadAdvert = (formData) => {
+  return axios.post('/admin/uploadAdvert', formData)
+}
+const deleteAdvert = (ids) => {
+  return axios.post('/admin/deleteAdvert', ids)
+}
+const getAdvert = () => {
+  return axios.get('/public/getAdvert')
+}
 
 export { addMenu,
   updataMenu,
@@ -60,4 +78,11 @@ export { addMenu,
   deleteComment,
   batchEditComment,
   batchDeleteComment,
-  getStats }
+  getStats,
+  getlogs,
+  deleteLogs,
+  uploadImg,
+  uploadAdvert,
+  getAdvert,
+  deleteAdvert
+}

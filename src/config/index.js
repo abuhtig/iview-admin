@@ -18,7 +18,7 @@ export default {
    */
   baseUrl: {
     dev: 'http://127.0.0.1:3000',
-    pro: 'http://120.48.21.232:3000'
+    pro: 'https://www.toped.top:444'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

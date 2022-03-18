@@ -108,5 +108,45 @@ export default [
         component: () => import('@/view/comment/index.vue')
       }
     ]
+  },
+  {
+    path: '/logs',
+    name: 'logs',
+    meta: {
+      icon: 'md-bug',
+      title: '日志'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/logs_index',
+        name: 'logs_manage',
+        meta: {
+          icon: 'md-bug',
+          title: '日志管理'
+        },
+        component: () => import('@/view/logs/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/advert',
+    name: 'advert',
+    meta: {
+      icon: 'logo-linkedin',
+      title: '友链'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/advert_index',
+        name: 'advert_manage',
+        meta: {
+          icon: 'md-link',
+          title: '广告管理'
+        },
+        component: () => import('@/view/advert/index.vue')
+      }
+    ]
   }
 ]

@@ -53,5 +53,9 @@ export default {
   roles: 'Roles',
   menu: 'Menu',
   comment: 'comment',
-  review: 'review'
+  review: 'review',
+  logs_manage: 'logs_manage',
+  logs: 'logs',
+  advert_manage: 'advert Manage',
+  advert: 'advert'
 }

@@ -53,5 +53,9 @@ export default {
   roles: '許可權',
   menu: '選單',
   review: '評論',
-  comment: '評論管理'
+  comment: '評論管理',
+  logs_manage: '日誌管理',
+  logs: '日誌',
+  advert: '友鏈',
+  advert_manage: '廣告管理'
 }
